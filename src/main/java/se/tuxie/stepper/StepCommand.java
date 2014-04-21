@@ -23,7 +23,6 @@ public class StepCommand extends CommandBase {
 	/*
 	 * - Todo:
 	 *   Search for placing of the player in the new dimension
-	 *   Register an item
 	 */
 	
 	

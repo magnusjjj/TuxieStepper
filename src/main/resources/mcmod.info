@@ -1,14 +1,14 @@
 [
 {
-  "modid": "examplemod",
-  "name": "Example Mod",
-  "description": "Example placeholder mod.",
+  "modid": "tuxiestepper",
+  "name": "TuxieStepper",
+  "description": "The first alpha of Tuxies magnificient stepper, based on the novel 'Long Earth'",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authors": ["ExampleDude"],
-  "credits": "The Forge and FML guys, for making this example",
+  "authors": ["Magnus Johnsson"],
+  "credits": "Magnus Johnsson, for his awesome. SenseiKiwi and Steven, for amazing help with the TP and other small issues. <3. Torbjørn Amunstad Balle for his fantastic icon.",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []

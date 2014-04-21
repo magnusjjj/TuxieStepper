@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.util.Random;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ChatMessageComponent;
@@ -73,6 +74,7 @@ public class StepperHelper {
 		        
 				String savefolder_last =  DimensionManager.getProvider(jumptodimension).getProviderForDimension(jumptodimension).getSaveFolder();
 				
+				
 				if(savefolder_last == null) // If the savefolder is null, then its the overworld
 				{
 					savefolder_last = "";
@@ -95,15 +97,65 @@ public class StepperHelper {
 			return;
 		}
 		
+		World dim = DimensionManager.getWorld(jumptodimension);
 		
 
 		Point4D coord = new Point4D();
-		coord.X = player.posX;
-		coord.Y = 128;
-		coord.Z = player.posZ;
+		coord.X = Math.floor(player.posX);
+		coord.Y = bestheight(player.posX, player.posZ, player.posY, jumptodimension, player);
+		coord.Z = Math.floor(player.posZ);
 		coord.Dimension = jumptodimension;
 		
 		
 		SenseiKiwisSuperAwesomeTeleporter.teleportPlayerTo(player, coord);				
 	}
+	
+	public static int bestheight(double X, double Z, double currentheight, int dimension, EntityPlayerMP player) {
+		// player.height
+		
+		World dim = DimensionManager.getWorld(dimension);
+		
+		int offset = 0;
+
+		while(offset < dim.getActualHeight()) // Wheee, DANGER WILL ROBINSON
+		{
+			if(checkifvalidtp((int)X, (int)Z, (int)currentheight + offset, dimension, player))
+			{
+				return (int)currentheight + offset;
+			}
+			
+			if(checkifvalidtp((int)X, (int)Z, (int)currentheight - offset, dimension, player))
+			{
+				return (int)currentheight - offset;
+			}
+			
+			offset++;
+		}
+		
+		return 128;
+	}
+	
+	public static boolean checkifvalidtp(int X, int Z, int currentheight, int dimension, EntityPlayerMP player)
+	{
+		World dim = DimensionManager.getWorld(dimension);
+		// Width
+		for(int XT = X - (int)Math.ceil(player.width); XT < X + (int)Math.ceil(player.width) ; XT++)
+		{
+			// Length
+			for(int ZT = Z - (int)Math.ceil(player.width); ZT < Z + (int) Math.ceil(player.width); ZT++)
+			{
+				// Height
+				for(int YT = currentheight; YT < currentheight + (int) Math.ceil(player.height); YT++)
+				{
+					if(dim.getBlockMaterial(XT, YT, ZT).isSolid())
+					{
+						return false;
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
 }

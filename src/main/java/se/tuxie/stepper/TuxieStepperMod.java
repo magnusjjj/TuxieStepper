@@ -6,6 +6,7 @@ import scala.reflect.io.Directory;
 import scala.util.parsing.json.JSON;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderFlat;
 import net.minecraftforge.common.Configuration;
@@ -15,13 +16,14 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid = TuxieStepperMod.MODID, version = TuxieStepperMod.VERSION)
 public class TuxieStepperMod
 {
-    public static final String MODID = "examplemod";
-    public static final String VERSION = "1.0";
+    public static final String MODID = "tuxiestepper";
+    public static final String VERSION = "0.1";
     public static final int providerid = 2000;
     public static Item stepperItem;
     
@@ -34,8 +36,15 @@ public class TuxieStepperMod
 			throw new IllegalStateException("Error stolen from DimensionalDoors!");
     	
     	stepperItem = new StepperItem(900);
+    	stepperItem.setUnlocalizedName("stepper");
+    	GameRegistry.registerItem(stepperItem, "stepper");
     	LanguageRegistry.addName(stepperItem, "Stepper");
 
+    	
+    	
+    	
+
+    	
     }
     
     @EventHandler
@@ -75,6 +84,14 @@ public class TuxieStepperMod
     public void init(FMLInitializationEvent event)
     {
     	
+    	
+    	
+    	GameRegistry.addRecipe(new ItemStack(stepperItem), new Object[]{
+            " Z ",
+            "CIC",
+            "CRC",
+            'C', Block.stone, 'Z', Block.lever, 'I', Item.comparator, 'R', Item.redstoneRepeater
+    	});
         
     }
 }

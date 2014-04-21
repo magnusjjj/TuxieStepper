@@ -2,6 +2,7 @@ package se.tuxie.stepper;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -17,7 +18,15 @@ public class StepperItem extends Item {
 	public StepperItem(int par1) {
 		super(par1);
 		this.setCreativeTab(CreativeTabs.tabTools);
+		//this.setTextureName(TuxieStepperMod.MODID + ":" + "stepper");
 	}
+	
+	@Override
+	public void registerIcons(IconRegister par1IconRegister)
+	{
+		this.itemIcon = par1IconRegister.registerIcon(TuxieStepperMod.MODID + ":" + this.getUnlocalizedName().replace("item.", ""));
+	}
+	
 	
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack){
