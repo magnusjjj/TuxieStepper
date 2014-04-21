@@ -23,28 +23,31 @@ import cpw.mods.fml.common.registry.LanguageRegistry;
 public class TuxieStepperMod
 {
     public static final String MODID = "tuxiestepper";
-    public static final String VERSION = "0.1";
-    public static final int providerid = 2000;
+    public static final String VERSION = "0.2";
+    public static int providerid = 2000;
     public static Item stepperItem;
     
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
+    	// First thing we do, is set up the config.
     	Configuration config = new Configuration(event.getSuggestedConfigurationFile());
+    	config.load();
+    	stepperItem = new StepperItem(config.getItem("stepper", 9000).getInt());
+
+    	this.providerid = config.get(Configuration.CATEGORY_GENERAL, "providerid", 2000).getInt();
+    	
+    	config.save();
+    	
+    	
     	if (!DimensionManager.registerProviderType(providerid, TuxWorldProvider.class, false))
 			throw new IllegalStateException("Error stolen from DimensionalDoors!");
     	
-    	stepperItem = new StepperItem(900);
+
     	stepperItem.setUnlocalizedName("stepper");
     	GameRegistry.registerItem(stepperItem, "stepper");
     	LanguageRegistry.addName(stepperItem, "Stepper");
-
-    	
-    	
-    	
-
-    	
     }
     
     @EventHandler
@@ -53,9 +56,6 @@ public class TuxieStepperMod
 
     	
     }
-    
-
-    
     
     @EventHandler
     public void onServerStarting(FMLServerStartingEvent event) {
@@ -83,15 +83,11 @@ public class TuxieStepperMod
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
-    	
-    	
-    	
     	GameRegistry.addRecipe(new ItemStack(stepperItem), new Object[]{
             " Z ",
             "CIC",
             "CRC",
             'C', Block.stone, 'Z', Block.lever, 'I', Item.comparator, 'R', Item.redstoneRepeater
     	});
-        
     }
 }
