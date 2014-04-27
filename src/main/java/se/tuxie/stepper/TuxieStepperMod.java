@@ -4,6 +4,10 @@ import java.io.File;
 
 import scala.reflect.io.Directory;
 import scala.util.parsing.json.JSON;
+import se.tuxie.stepper.packetstuff.ClientPacketHandler;
+import se.tuxie.stepper.packetstuff.ConnectionHandler;
+import se.tuxie.stepper.packetstuff.PacketConstants;
+import se.tuxie.stepper.packetstuff.ServerPacketHandler;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,15 +19,24 @@ import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 @Mod(modid = TuxieStepperMod.MODID, version = TuxieStepperMod.VERSION)
+@NetworkMod(clientSideRequired = true, serverSideRequired = false, connectionHandler=ConnectionHandler.class,
+clientPacketHandlerSpec =
+@SidedPacketHandler(channels = {PacketConstants.CHANNEL_NAME}, packetHandler = ClientPacketHandler.class),
+serverPacketHandlerSpec =
+@SidedPacketHandler(channels = {PacketConstants.CHANNEL_NAME}, packetHandler = ServerPacketHandler.class))
+
 public class TuxieStepperMod
 {
     public static final String MODID = "tuxiestepper";
-    public static final String VERSION = "0.2";
+    public static final String VERSION = "0.6";
     public static int providerid = 2000;
     public static Item stepperItem;
     
@@ -42,7 +55,7 @@ public class TuxieStepperMod
     	
     	
     	if (!DimensionManager.registerProviderType(providerid, TuxWorldProvider.class, false))
-			throw new IllegalStateException("Error stolen from DimensionalDoors!");
+			throw new IllegalStateException("Cant register the provider.");
     	
 
     	stepperItem.setUnlocalizedName("stepper");
@@ -53,7 +66,6 @@ public class TuxieStepperMod
     @EventHandler
     public void onInitialization(FMLInitializationEvent event)
     {
-
     	
     }
     

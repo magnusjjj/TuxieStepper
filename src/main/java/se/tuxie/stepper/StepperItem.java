@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,35 +20,90 @@ public class StepperItem extends Item {
 		super(par1);
 		this.setCreativeTab(CreativeTabs.tabTools);
 		//this.setTextureName(TuxieStepperMod.MODID + ":" + "stepper");
+		this.setMaxDamage(500);
+		this.setMaxStackSize(1);
+		
+		
+	}
+	
+	@Override
+	public int getMaxItemUseDuration(ItemStack par1ItemStack)
+	{
+		return 0;
+		
+
+		
+	}
+	
+	@Override
+	public void onUpdate(ItemStack par1ItemStack, World par2World, Entity par3Entity, int par4, boolean par5){
+		this.setDamage(par1ItemStack, this.getDamage(par1ItemStack) - 1 != 0 ? this.getDamage(par1ItemStack) - 1 : 0);
 	}
 	
 	@Override
 	public void registerIcons(IconRegister par1IconRegister)
 	{
 		this.itemIcon = par1IconRegister.registerIcon(TuxieStepperMod.MODID + ":" + this.getUnlocalizedName().replace("item.", ""));
+		
+		
 	}
+	
+	@Override
+	public boolean isDamageable()
+	{
+		return false;
+	}
+	
 	
 	
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack){
 		if(entityLiving instanceof EntityPlayerMP)
 		{
-			EntityPlayerMP playermp = (EntityPlayerMP) entityLiving;
-			StepperHelper.stepPlayer(playermp, "east");
+			if(stack.getItemDamage() == 0)
+			{
+				stack.setItemDamage(400);
+				//stack.damageItem(400, entityLiving);
+				EntityPlayerMP playermp = (EntityPlayerMP) entityLiving;
+
+				StepperHelper.stepPlayer(playermp, "east");
+			}
 		}
+		
+		
 		return true;
+		
 	}
 	
-	
 	@Override
-	public ItemStack onItemRightClick(ItemStack item, World theworld, EntityPlayer player)
+	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10)
 	{
+		//par1ItemStack.setItemDamage(400);
+		return false;
+	}
+
+
+	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World theworld, EntityPlayer player)
+	{
+		//stack = super.onItemRightClick(stack, theworld, player);
 		if(player instanceof EntityPlayerMP)
 		{
-			EntityPlayerMP playermp = (EntityPlayerMP) player;
-			StepperHelper.stepPlayer(playermp, "west");
+			if(stack.getItemDamage() == 0)
+			{
+				stack.setItemDamage(400);
+				
+				player.openContainer.detectAndSendChanges();
+				//stack.damageItem(400, player);
+				EntityPlayerMP playermp = (EntityPlayerMP) player;
+				StepperHelper.stepPlayer(playermp, "west");
+				//return null;
+			}
+			
+
 		}
-		return item;
+		
+		return stack;
 	}
 	
 	

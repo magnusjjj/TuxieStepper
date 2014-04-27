@@ -25,8 +25,12 @@ public class TuxWorldProvider extends WorldProvider {
 	
 	public long getSeed()
 	{
-		Random r = new Random(DimensionManager.getProvider(0).getSeed() + dimensionId);
-		return r.nextLong();
+		try { // HORRIBLE HACK OF DOOM
+			Random r = new Random(DimensionManager.getProvider(0).getSeed() + dimensionId);
+			return r.nextLong();
+		} catch (Exception e) {
+			return 0;
+		}
 	}
 	
 	
